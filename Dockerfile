@@ -67,5 +67,6 @@ RUN cd /opt/states && unzip cb_2017_us_state_500k.zip && rm cb_2017_us_state_500
 # Execute tile generator
 COPY run_counties.sh  /opt/counties/run_counties.sh
 COPY run_states.sh /opt/states/run_states.sh
+COPY run_both.sh /opt/run_both.sh
 
-ENTRYPOINT ["/bin/bash", "/opt/counties/run_counties.sh && /opt/states/run_states.sh"]
+ENTRYPOINT ["/bin/bash", "/opt/run_both.sh"]

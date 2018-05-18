@@ -2,8 +2,8 @@
 <Map srs="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs">
     <Style name="County Style">
         <Rule>
-            <PolygonSymbolizer fill="#ff000066"/>
-            <LineSymbolizer stroke="#ff0000ff" stroke-width="1"/>
+            <PolygonSymbolizer fill="#de9d2666"/>
+            <LineSymbolizer stroke="#de9d26ff" stroke-width="1"/>
         </Rule>
     </Style>
 

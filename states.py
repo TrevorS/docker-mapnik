@@ -125,4 +125,4 @@ bbox = (left, bottom, right, top)
 prj = mapnik.Projection(m.srs)
 tileproj = GoogleProjection()
 
-render_tiles(bbox, '/output/', minZoom=7, maxZoom=9)
+render_tiles(bbox, '/output/states', minZoom=4, maxZoom=6)

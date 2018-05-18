@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map srs="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs">
+    <Style name="State Style">
+        <Rule>
+            <PolygonSymbolizer fill="#de9d2666"/>
+            <LineSymbolizer stroke="#de9d26ff" stroke-width="1"/>
+        </Rule>
+    </Style>
+
+	<Layer name="states" srs="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs">
+        <StyleName>State Style</StyleName>
+        <Datasource>
+            <Parameter name="file">cb_2017_us_state.shp</Parameter>
+            <Parameter name="encoding">iso-8859-1</Parameter>
+            <Parameter name="type">shape</Parameter>
+        </Datasource>
+	</Layer>
+</Map>

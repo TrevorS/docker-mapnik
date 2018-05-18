@@ -22,19 +22,32 @@
   </div>
 
   <script>
-    console.log('start script');
+    const baseTileUrl = 'http://localhost:3000';
+    const statesMinZoom = 4;
+    const statesMaxZoom = 6;
+
+    const countiesMinZoom = 7;
+    const countiesMaxZoom = 9;
+
     let map;
 
+    function isStateZoom(zoom) {
+      return zoom >= statesMinZoom && zoom <= statesMaxZoom;
+    }
+
+    function isCountiesZoom(zoom) {
+      return zoom >= countiesMinZoom && zoom <= countiesMaxZoom;
+    }
+
+    function getUrl(tiles, zoom, x, y) {
+      return `http://localhost:3000/output/${tiles}/${zoom}/${x}/${y}.png`;
+    }
+
     function initMap() {
-      console.log('initMap');
       const mapElement = document.getElementById('map');
 
-      const minZoom = 5;
-      const maxZoom = 9;
-      const name = 'counties';
-
       map = new google.maps.Map(mapElement, {
-        zoom: 6,
+        zoom: 5,
         center: {
           lat: 37.783,
           lng: -122.403,
@@ -43,11 +56,14 @@
 
       const countiesMapType = new google.maps.ImageMapType({
         getTileUrl: function(coord, zoom) {
-          if (zoom < minZoom || zoom > maxZoom) {
-            return null;
+          if (isStateZoom(zoom)) {
+            return getUrl('states', zoom, coord.x, coord.y);
+          }
+          if (isCountiesZoom(zoom)) {
+            return getUrl('counties', zoom, coord.x, coord.y);
           }
 
-          return ['http://localhost:3000/output/', zoom, '/', coord.x, '/', coord.y, '.png'].join('');
+          return null;
         },
         tileSize: new google.maps.Size(256, 256),
       });

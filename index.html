@@ -23,11 +23,15 @@
 
   <script>
     const baseTileUrl = 'http://localhost:3000';
+
     const statesMinZoom = 4;
     const statesMaxZoom = 6;
 
     const countiesMinZoom = 7;
     const countiesMaxZoom = 9;
+
+    const townshipsMinZoom = 10;
+    const townshipsMaxZoom = 12;
 
     let map;
 
@@ -39,8 +43,28 @@
       return zoom >= countiesMinZoom && zoom <= countiesMaxZoom;
     }
 
-    function getUrl(tiles, zoom, x, y) {
-      return `http://localhost:3000/output/${tiles}/${zoom}/${x}/${y}.png`;
+    function isTownshipsZoom(zoom) {
+      return zoom >= townshipsMinZoom && zoom <= townshipsMaxZoom;
+    }
+
+    function getTileType(zoom) {
+      if (isStateZoom(zoom)) {
+        return 'states';
+      }
+
+      if (isCountiesZoom(zoom)) {
+        return 'counties';
+      }
+
+      if (isTownshipsZoom(zoom)) {
+        return 'townships';
+      }
+
+      return null;
+    }
+
+    function getUrl(tileType, zoom, x, y) {
+      return `http://localhost:3000/output/${tileType}/${zoom}/${x}/${y}.png`;
     }
 
     function initMap() {
@@ -56,11 +80,10 @@
 
       const countiesMapType = new google.maps.ImageMapType({
         getTileUrl: function(coord, zoom) {
-          if (isStateZoom(zoom)) {
-            return getUrl('states', zoom, coord.x, coord.y);
-          }
-          if (isCountiesZoom(zoom)) {
-            return getUrl('counties', zoom, coord.x, coord.y);
+          const tileType = getTileType(zoom);
+
+          if (tileType) {
+            return getUrl(tileType, zoom, coord.x, coord.y);
           }
 
           return null;

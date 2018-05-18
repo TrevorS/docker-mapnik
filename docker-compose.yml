@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  mapnik:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: "cd /opt/counties && python3 counties.py"
+    volumes:
+      - ./output:/output

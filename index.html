@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test Map Tiles</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map">
+  </div>
+
+  <script>
+    console.log('start script');
+    let map;
+
+    function initMap() {
+      console.log('initMap');
+      const mapElement = document.getElementById('map');
+
+      const minZoom = 5;
+      const maxZoom = 9;
+      const name = 'counties';
+
+      map = new google.maps.Map(mapElement, {
+        zoom: 6,
+        center: {
+          lat: 37.783,
+          lng: -122.403,
+        },
+      });
+
+      const countiesMapType = new google.maps.ImageMapType({
+        getTileUrl: function(coord, zoom) {
+          if (zoom < minZoom || zoom > maxZoom) {
+            return null;
+          }
+
+          return ['http://localhost:3000/output/', zoom, '/', coord.x, '/', coord.y, '.png'].join('');
+        },
+        tileSize: new google.maps.Size(256, 256),
+      });
+
+      map.overlayMapTypes.push(countiesMapType);
+    }
+  </script>
+
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVMQCcXPAIyiLN6166SX2Kvp3lc81iQ7A&callback=initMap"
+    async defer>
+  </script>
+</body>
+</html>

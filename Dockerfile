@@ -24,12 +24,15 @@ ENV PYTHON_MAPNIK_COMMIT 3a60211dee366060acf4e5e0de8b621b5924f2e6
 RUN mkdir -p /opt/python-mapnik && curl -L https://github.com/mapnik/python-mapnik/archive/${PYTHON_MAPNIK_COMMIT}.tar.gz | tar xz -C /opt/python-mapnik --strip-components=1
 RUN cd /opt/python-mapnik && python2 setup.py install && python3 setup.py install && rm -r /opt/python-mapnik/build
 
-# Tests
+# Counties
 RUN apt-get install -y unzip
-RUN mkdir -p /opt/demos
-COPY world.py /opt/demos/world.py
-COPY 110m-admin-0-countries.zip /opt/demos/110m-admin-0-countries.zip
-RUN cd /opt/demos && unzip 110m-admin-0-countries.zip && rm 110m-admin-0-countries.zip
-COPY world.js /opt/demos/world.js
-COPY stylesheet.xml /opt/demos/stylesheet.xml
+RUN mkdir -p /opt/counties
+COPY counties.py /opt/counties/counties.py
 
+COPY cb_2017_us_county_500k.zip /opt/counties
+RUN cd /opt/counties && unzip cb_2017_us_county_500k.zip && rm cb_2017_us_county_500k.zip
+
+COPY stylesheet.xml /opt/counties/stylesheet.xml
+COPY run_counties.sh  /opt/counties/run_counties.sh
+
+ENTRYPOINT ["/bin/bash", "/opt/counties/run_counties.sh"]

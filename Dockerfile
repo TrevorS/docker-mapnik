@@ -64,18 +64,9 @@ COPY states-stylesheet.xml /opt/states/stylesheet.xml
 COPY cb_2017_us_state_500k.zip /opt/states
 RUN cd /opt/states && unzip cb_2017_us_state_500k.zip && rm cb_2017_us_state_500k.zip
 
-# Townships
-RUN mkdir -p /opt/townships
-COPY townships.py /opt/townships/townships.py
-COPY townships-stylesheet.xml /opt/townships/stylesheet.xml
-
-COPY PLSS_Townships.zip /opt/townships
-RUN cd /opt/townships && unzip PLSS_Townships.zip && rm PLSS_Townships.zip
-
 # Execute tile generator
 COPY run_counties.sh  /opt/counties/run_counties.sh
 COPY run_states.sh /opt/states/run_states.sh
-COPY run_townships.sh /opt/townships/run_townships.sh
 COPY run_all.sh /opt/run_all.sh
 
 ENTRYPOINT ["/bin/bash", "/opt/run_all.sh"]

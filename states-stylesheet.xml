@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs">
-  <Style name="State Style">
+  <Style name="state_borders">
     <Rule>
       <PolygonSymbolizer fill="#de9d2666"/>
       <LineSymbolizer stroke="#de9d26ff" stroke-width="1"/>
     </Rule>
   </Style>
 
+  <Style name="state_names">
+    <Rule>
+      <TextSymbolizer
+        face-name="Helvetica Regular"
+        halo-fill="white"
+        halo-radius="1"
+        allow-overlap="false">
+        [NAME]
+      </TextSymbolizer>
+    </Rule>
+  </Style>
+
 	<Layer name="states" srs="+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs">
-    <StyleName>State Style</StyleName>
+    <StyleName>state_borders</StyleName>
+    <StyleName>state_names</StyleName>
+
     <Datasource>
         <Parameter name="file">cb_2017_us_state_500k.shp</Parameter>
         <Parameter name="encoding">iso-8859-1</Parameter>

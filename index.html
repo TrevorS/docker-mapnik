@@ -22,19 +22,54 @@
   </div>
 
   <script>
-    const baseTileUrl = 'http://localhost:3000';
+    const extents = {
+      4: {
+        minX: 2,
+        maxX: 5,
+        minY: 5,
+        maxY: 6,
+      },
+      5: {
+        minX: 4,
+        maxX: 10,
+        minY: 10,
+        maxY: 13,
+      },
+      6: {
+        minX: 9,
+        maxX: 20,
+        minY: 21,
+        maxY: 27,
+      },
+      7: {
+        minX: 19,
+        maxX: 40,
+        minY: 43,
+        maxY: 54,
+      },
+      8: {
+        minX: 39,
+        maxX: 80,
+        minY: 87,
+        maxY: 109,
+      },
+      9: {
+        minX: 78,
+        maxX: 160,
+        minY: 175,
+        maxY: 219,
+      },
+    };
 
+    const baseTileUrl = 'http://localhost:3000';
     const statesMinZoom = 4;
     const statesMaxZoom = 6;
-
     const countiesMinZoom = 7;
     const countiesMaxZoom = 9;
 
-    const townshipsMinZoom = 10;
-    const townshipsMaxZoom = 12;
-
     let map;
 
+    // add custom tile set config
     function isStateZoom(zoom) {
       return zoom >= statesMinZoom && zoom <= statesMaxZoom;
     }
@@ -43,8 +78,10 @@
       return zoom >= countiesMinZoom && zoom <= countiesMaxZoom;
     }
 
-    function isTownshipsZoom(zoom) {
-      return zoom >= townshipsMinZoom && zoom <= townshipsMaxZoom;
+    function haveTileFor(zoom, x, y) {
+      var z = extents[zoom];
+
+      return z && x >= z.minX && x <= z.maxX && y >= z.minY && y <= z.maxY;
     }
 
     function getTileType(zoom) {
@@ -56,8 +93,16 @@
         return 'counties';
       }
 
-      if (isTownshipsZoom(zoom)) {
-        return 'townships';
+      return null;
+    }
+
+    function getTileType(zoom) {
+      if (isStateZoom(zoom)) {
+        return 'states';
+      }
+
+      if (isCountiesZoom(zoom)) {
+        return 'counties';
       }
 
       return null;
@@ -73,17 +118,20 @@
       map = new google.maps.Map(mapElement, {
         zoom: 5,
         center: {
-          lat: 37.783,
-          lng: -122.403,
+          lat: 39,
+          lng: -98,
         },
       });
 
       const countiesMapType = new google.maps.ImageMapType({
         getTileUrl: function(coord, zoom) {
-          const tileType = getTileType(zoom);
+          const { x, y } = coord;
 
-          if (tileType) {
-            return getUrl(tileType, zoom, coord.x, coord.y);
+          const tileType = getTileType(zoom);
+          const haveTile = haveTileFor(zoom, x, y);
+
+          if (tileType && haveTile) {
+            return getUrl(tileType, zoom, x, y);
           }
 
           return null;

@@ -116,6 +116,7 @@ m = mapnik.Map(2800, 1800)
 mapnik.load_map(m, 'stylesheet.xml')
 
 # http://en.wikipedia.org/wiki/Extreme_points_of_the_United_States#Westernmost
+# TODO: switch this to include all 50 states
 top = 49.3457868 # north lat
 left = -124.7844079 # west long
 right = -66.9513812 # east long

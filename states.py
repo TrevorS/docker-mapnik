@@ -114,6 +114,7 @@ def render_tiles(bbox, tile_dir, minZoom=1,maxZoom=18):
 
 m = mapnik.Map(2800, 1800)
 mapnik.load_map(m, 'stylesheet.xml')
+mapnik.register_fonts('/fonts')
 
 # http://en.wikipedia.org/wiki/Extreme_points_of_the_United_States#Westernmost
 # TODO: switch this to include all 50 states

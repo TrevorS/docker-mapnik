@@ -116,11 +116,49 @@
       const mapElement = document.getElementById('map');
 
       map = new google.maps.Map(mapElement, {
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        disableDefaultUI: true,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.LEFT_BOTTOM,
+        },
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          position: google.maps.ControlPosition.BOTTOM_LEFT,
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          mapTypeIds: [
+            google.maps.MapTypeId.HYBRID,
+            google.maps.MapTypeId.ROADMAP,
+          ],
+        },
         zoom: 5,
+        minZoom: 3,
+        maxZoom: 10,
         center: {
           lat: 39,
           lng: -98,
         },
+        styles: [
+          {
+            featureType: 'administrative',
+            elementType: 'labels',
+            stylers: [
+              { visibility: 'off' }
+            ],
+          }, {
+            featureType: 'poi',
+            elementType: 'labels',
+            stylers: [
+              { visibility: 'off' }
+            ],
+          }, {
+            featureType: 'transit.station',
+            elementType: 'labels',
+            stylers: [
+              { visibility: 'off' }
+            ],
+          },
+        ],
       });
 
       const countiesMapType = new google.maps.ImageMapType({

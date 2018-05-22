@@ -10,10 +10,11 @@
   <Style name="county_names">
     <Rule>
       <TextSymbolizer
-        face-name="DejaVu Sans Book"
+        face-name="Ideal Sans Book"
         halo-fill="white"
-        halo-radius="1"
-        allow-overlap="false">
+        halo-radius="1.5"
+        size="12.0"
+        clip="false">
         [NAME]
       </TextSymbolizer>
     </Rule>

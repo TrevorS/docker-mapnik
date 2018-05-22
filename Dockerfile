@@ -64,9 +64,5 @@ COPY states-stylesheet.xml /opt/states/stylesheet.xml
 COPY cb_2017_us_state_500k.zip /opt/states
 RUN cd /opt/states && unzip cb_2017_us_state_500k.zip && rm cb_2017_us_state_500k.zip
 
-# Execute tile generator
-COPY run_counties.sh  /opt/counties/run_counties.sh
-COPY run_states.sh /opt/states/run_states.sh
 COPY run_all.sh /opt/run_all.sh
-
 ENTRYPOINT ["/bin/bash", "/opt/run_all.sh"]

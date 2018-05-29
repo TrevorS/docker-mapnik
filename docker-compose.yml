@@ -6,5 +6,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ./output:/output
-      - ./fonts:/fonts
+      - ./fonts:/opt/fonts
+      - ./boundaries:/opt/boundaries
+      - ./stylesheets:/opt/stylesheets
+      - ./scripts:/opt/scripts
+      - ./output:/opt/output

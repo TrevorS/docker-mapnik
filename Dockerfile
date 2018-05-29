@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     software-properties-common \
     curl \
+    wget \
     libboost-dev \
     libboost-filesystem-dev \
     libboost-program-options-dev \
@@ -26,11 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     postgresql-contrib \
     libharfbuzz-dev \
     python3-dev \
-    python-dev \
     git \
-    python-pip \
-    python-setuptools \
-    python-wheel \
     python3-setuptools \
     python3-pip \
     python3-wheel \
@@ -46,23 +43,24 @@ RUN cd /tmp/mapnik-v${MAPNIK_VERSION} && make JOBS=4 && make install JOBS=4
 # Python Bindings
 ENV PYTHON_MAPNIK_COMMIT 804a7947d0176e2685ebf62459b44d9d08161451
 RUN mkdir -p /opt/python-mapnik && curl -L https://github.com/mapnik/python-mapnik/archive/${PYTHON_MAPNIK_COMMIT}.tar.gz | tar xz -C /opt/python-mapnik --strip-components=1
-RUN cd /opt/python-mapnik && python2 setup.py install && python3 setup.py install && rm -r /opt/python-mapnik/build
+RUN cd /opt/python-mapnik && python3 setup.py install && rm -r /opt/python-mapnik/build
 
-# Counties
-RUN mkdir -p /opt/counties
-COPY counties.py /opt/counties/counties.py
-COPY counties-stylesheet.xml /opt/counties/stylesheet.xml
+# Download State Shapes
+ENV STATES_SHAPEFILE_ZIP cb_2017_us_state_500k.zip
+ENV STATES_SHAPEFILE_DIR /opt/shapefiles/states
 
-COPY cb_2017_us_county_500k.zip /opt/counties
-RUN cd /opt/counties && unzip cb_2017_us_county_500k.zip && rm cb_2017_us_county_500k.zip
+RUN mkdir -p ${STATES_SHAPEFILE_DIR} && \
+  wget http://www2.census.gov/geo/tiger/GENZ2017/shp/${STATES_SHAPEFILE_ZIP} -P ${STATES_SHAPEFILE_DIR} && \
+  unzip -d ${STATES_SHAPEFILE_DIR} ${STATES_SHAPEFILE_DIR}/${STATES_SHAPEFILE_ZIP} && \
+  rm ${STATES_SHAPEFILE_DIR}/${STATES_SHAPEFILE_ZIP}
 
-# States
-RUN mkdir -p /opt/states
-COPY states.py /opt/states/states.py
-COPY states-stylesheet.xml /opt/states/stylesheet.xml
+# Download County Shapes
+ENV COUNTY_SHAPEFILE_ZIP cb_2017_us_county_500k.zip
+ENV COUNTY_SHAPEFILE_DIR /opt/shapefiles/counties
 
-COPY cb_2017_us_state_500k.zip /opt/states
-RUN cd /opt/states && unzip cb_2017_us_state_500k.zip && rm cb_2017_us_state_500k.zip
+RUN mkdir -p ${COUNTY_SHAPEFILE_DIR} && \
+  wget http://www2.census.gov/geo/tiger/GENZ2017/shp/${COUNTY_SHAPEFILE_ZIP} -P ${COUNTY_SHAPEFILE_DIR} && \
+  unzip -d ${COUNTY_SHAPEFILE_DIR} ${COUNTY_SHAPEFILE_DIR}/${COUNTY_SHAPEFILE_ZIP} && \
+  rm ${COUNTY_SHAPEFILE_DIR}/${COUNTY_SHAPEFILE_ZIP}
 
-COPY run_all.sh /opt/run_all.sh
-ENTRYPOINT ["/bin/bash", "/opt/run_all.sh"]
+ENTRYPOINT ["/bin/bash", "/opt/scripts/run_all.sh"]
